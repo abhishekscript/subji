@@ -3,13 +3,15 @@ from api import app,db,jsonify, request
 from datetime import datetime, timedelta
 from .models.subscription import Plan, PlanSubScription
 from .models.user import User, UserSerializer
-from sqlalchemy import exc
+from sqlalchemy import exc,desc
 import json
 
 
 def getExistingSubscription( userid ):
-    record = db.session.query(PlanSubScription).filter( User.id == userid ).first()
-    return record
+    records = db.session.query(PlanSubScription).join(User).filter( User.id == userid ).order_by(desc(PlanSubScription.createdAt)).all()
+    for record in records:
+        print("rec", record)
+    return records
     
 @app.route('/subscription', methods = ['POST'])
 def addSubscription():
@@ -33,6 +35,8 @@ def addSubscription():
         subs = getExistingSubscription( userData.view['id'] )
         if subs==None:
             planSub = PlanSubScription( plan= planId, userId= userData.view['id'] , startDate= startDate, endDate= endDate )
+            db.session.add(planSub)
+            db.session.commit()
             return jsonify({})
         else:
             return jsonify({"message" : "Plan already exists" })
