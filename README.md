@@ -1,7 +1,7 @@
 # subji
 Low Level Design for subji
 
-#Code Structure :
+# Code Structure :
 ```
   api
    |__init.py   #contains app config and route imports
@@ -14,3 +14,19 @@ Low Level Design for subji
    |__subscriptionView.py
    main.py   # main server file
 ```
+
+# To Execute  ( without docker )
+```
+pip install -r requirements.txt
+python main.py
+```
+# To Execute As Docker Image
+```
+Step 1:
+docker build -t subji .
+
+Step 2:
+docker run -p 19093:19093 subji
+```
+
+
