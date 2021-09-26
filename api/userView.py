@@ -18,7 +18,7 @@ def addUser(name):
 @app.route("/user", methods = ["GET"] )
 def getUsers():
     # Serialize query objects
-    d=[ UserSerializer(u).view for u in db.session.query(User).all() ]
+    d=[ UserSerializer(u).get() for u in db.session.query(User).all() ]
     return jsonify(d)
 
 
@@ -26,9 +26,9 @@ def getUsers():
 def getUserByName( name ):
 
     userData = db.session.query(User).filter(User.username==name).first()
-    userData = UserSerializer(userData)
-    if userData.view!= None:
-        return jsonify(userData.view)
+    userData = UserSerializer(userData).get()
+    if userData!={}:
+        return jsonify(userData)
     
     return jsonify({"message" : "user does not exist" }), 204
 

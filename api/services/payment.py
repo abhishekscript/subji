@@ -1,13 +1,11 @@
-import requests
+import json, requests
 
-url = "https://dummy-payment-server.herokuapp.com/payment"
+class PaymentGateway:
+	def __init__(self):
+		self.url = "https://dummy-payment-server.herokuapp.com/payment"
 
-
-def pay(payload):
-    payload = payload
-    headers = {
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-    response = requests.request("POST", url, data=payload, headers=headers)
-    return response
+	def post(self, payload):
+		payload  = json.dumps(payload)
+		headers  = {"Content-Type":"application/json"}
+		response = requests.request("POST", self.url, headers=headers, data=payload)
+		return response
